@@ -91,14 +91,15 @@ Pré-requisito: conta no [Databricks Free Edition](https://www.databricks.com/le
 1. Crie um volume em `workspace.bronze.raw` e os schemas `bronze`, `silver`, `gold` e `ops` no catálogo `workspace`.
 2. Importe os notebooks de `notebooks/` para o seu workspace.
 3. Abra `ans_lakehouse`, escolha `competencia` e `uf` nos widgets e execute. O notebook baixa o arquivo da ANS para o volume se ele ainda não estiver lá.
-4. Para o histórico, ajuste `NOTEBOOK` e `COMPETENCIAS` em `ans_backfill` e execute.
-5. Para rodar como Job, crie um Job com uma tarefa de notebook apontando para `ans_lakehouse`, computação serverless e 2 retries com 2 minutos de intervalo.
-6. Rode `sql/01_metadados.sql` (comentários e tags) e `sql/02_validacao_backfill.sql` (conferência) no SQL Editor.
+4. Execute `ans_operadoras` (mesmos widgets) depois da carga: ele baixa o `Relatorio_cadop.csv`, grava `silver.operadoras` e `gold.dim_operadora` e confere o join com broadcast. A carga dos beneficiários precisa ter rodado antes.
+5. Para o histórico, ajuste `NOTEBOOK` e `COMPETENCIAS` em `ans_backfill` e execute.
+6. Para rodar como Job, crie um Job com uma tarefa de notebook apontando para `ans_lakehouse`, computação serverless e 2 retries com 2 minutos de intervalo.
+7. Rode `sql/01_metadados.sql` (comentários e tags) e `sql/02_validacao_backfill.sql` (conferência) no SQL Editor.
 
 ## Estrutura do projeto
 
 ```
-notebooks/   ans_lakehouse.py (carga parametrizada) e ans_backfill.py (carga histórica)
+notebooks/   ans_lakehouse.py (carga parametrizada), ans_operadoras.py (cadastro e dimensão) e ans_backfill.py (carga histórica)
 sql/         01_metadados.sql (comentários e tags) e 02_validacao_backfill.sql (conferência)
 ```
 
